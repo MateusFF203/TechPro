@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodePath — Aprenda do seu jeito</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28;
+    --accent: #f5c842; --accent2: #ff6b35; --text: #f0ede8;
+    --muted: #6b6b80; --border: rgba(255,255,255,0.07);
+    --radius: 16px; --green: #22c55e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+  header { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px 48px; background:rgba(10,10,15,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem; color:var(--accent); letter-spacing:-0.5px; text-decoration:none; }
+  .logo span { color:var(--accent2); }
+  nav { display:flex; gap:8px; }
+  nav a { padding:8px 18px; border-radius:40px; font-size:0.875rem; font-weight:500; color:var(--muted); text-decoration:none; transition:all 0.2s; }
+  nav a:hover { color:var(--text); background:var(--surface2); }
+  nav a.active { color:var(--bg); background:var(--accent); font-weight:600; }
+  .header-btn { padding:9px 22px; border-radius:40px; background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:500; cursor:pointer; transition:all 0.2s; }
+  .header-btn:hover { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+
+  .hero { padding:100px 48px 80px; position:relative; overflow:hidden; min-height:480px; display:flex; align-items:center; }
+  .hero-bg { position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(245,200,66,0.12) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,107,53,0.1) 0%, transparent 60%); }
+  .hero-content { position:relative; z-index:1; max-width:640px; }
+  .hero-tag { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:40px; background:rgba(245,200,66,0.12); border:1px solid rgba(245,200,66,0.25); font-size:0.8rem; font-weight:500; color:var(--accent); margin-bottom:28px; }
+  .hero-tag::before { content:'●'; font-size:0.5rem; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1 { font-family:'Syne',sans-serif; font-size:clamp(2.4rem,5vw,3.8rem); font-weight:800; line-height:1.05; letter-spacing:-1.5px; margin-bottom:22px; }
+  h1 em { font-style:normal; color:var(--accent); }
+  .hero p { font-size:1.1rem; color:rgba(240,237,232,0.65); line-height:1.7; max-width:500px; margin-bottom:36px; }
+  .hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-primary { padding:14px 30px; border-radius:40px; background:var(--accent); color:var(--bg); font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.95rem; border:none; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 24px rgba(245,200,66,0.3); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(245,200,66,0.4); }
+  .btn-outline { padding:14px 30px; border-radius:40px; background:transparent; color:var(--text); font-family:'DM Sans',sans-serif; font-weight:500; font-size:0.95rem; border:1px solid var(--border); cursor:pointer; transition:all 0.2s; }
+  .btn-outline:hover { background:var(--surface2); border-color:rgba(255,255,255,0.15); }
+
+  .stats { display:flex; margin:60px 48px 0; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+  .stat { flex:1; padding:28px 32px; border-right:1px solid var(--border); transition:background 0.2s; }
+  .stat:last-child { border-right:none; }
+  .stat:hover { background:var(--surface2); }
+  .stat-num { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--accent); }
+  .stat-label { font-size:0.85rem; color:var(--muted); margin-top:4px; }
+
+  section { padding:80px 48px; }
+  .section-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:40px; }
+  .section-title { font-family:'Syne',sans-serif; font-size:clamp(1.5rem,3vw,2rem); font-weight:700; letter-spacing:-0.5px; }
+  .see-all { font-size:0.875rem; color:var(--accent); text-decoration:none; font-weight:500; display:flex; align-items:center; gap:4px; transition:gap 0.2s; }
+  .see-all:hover { gap:8px; }
+
+  .search-bar { display:flex; gap:12px; margin-bottom:36px; flex-wrap:wrap; }
+  .search-input { flex:1; min-width:260px; padding:12px 20px; border-radius:40px; background:var(--surface); border:1px solid var(--border); color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; }
+  .search-input::placeholder { color:var(--muted); }
+  .search-input:focus { border-color:rgba(245,200,66,0.4); }
+  .filter-btn { padding:12px 20px; border-radius:40px; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.875rem; cursor:pointer; transition:all 0.2s; }
+  .filter-btn:hover,.filter-btn.active { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+
+  .courses-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
+
+  .course-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; cursor:pointer; transition:all 0.3s; position:relative; display:flex; flex-direction:column; }
+  .course-card:hover { transform:translateY(-6px); border-color:rgba(245,200,66,0.3); box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(245,200,66,0.15); }
+  .course-thumb { width:100%; aspect-ratio:16/9; background:var(--surface2); position:relative; overflow:hidden; }
+  .thumb-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; background:linear-gradient(135deg,var(--surface2) 0%,#1a1a2e 100%); }
+  .play-icon { width:52px; height:52px; background:rgba(245,200,66,0.15); border:2px solid rgba(245,200,66,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:all 0.3s; }
+  .course-card:hover .play-icon { background:var(--accent); border-color:var(--accent); color:var(--bg); }
+  .thumb-label { font-size:0.75rem; color:var(--muted); }
+  .course-badge { position:absolute; top:12px; left:12px; padding:4px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .badge-new { background:var(--accent); color:var(--bg); }
+  .badge-hot { background:var(--accent2); color:white; }
+  .badge-free { background:var(--green); color:white; }
+
+  .course-body { padding:20px; flex:1; display:flex; flex-direction:column; }
+  .course-category { font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--accent2); margin-bottom:8px; }
+  .course-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; line-height:1.4; margin-bottom:10px; color:var(--text); }
+  .course-desc { font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; flex:1; }
+
+  /* ── PRICE ── */
+  .course-price-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:12px 14px; border-radius:10px; background:var(--surface2); border:1px solid var(--border); }
+  .price-tag { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .price-value { font-family:'Syne',sans-serif; font-size:1.25rem; font-weight:800; }
+  .price-value.free { color:var(--green); }
+  .price-value.paid { color:var(--accent); }
+  .price-original { font-size:0.78rem; color:var(--muted); text-decoration:line-through; }
+  .price-discount { background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.3); color:var(--green); padding:3px 8px; border-radius:20px; font-size:0.7rem; font-weight:700; }
+
+  .btn-enroll { width:100%; padding:11px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:700; cursor:pointer; border:none; transition:all 0.2s; margin-bottom:14px; }
+  .btn-enroll.free-btn { background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); color:var(--green); }
+  .btn-enroll.free-btn:hover { background:var(--green); color:white; }
+  .btn-enroll.paid-btn { background:var(--accent); color:var(--bg); box-shadow:0 4px 16px rgba(245,200,66,0.25); }
+  .btn-enroll.paid-btn:hover { box-shadow:0 6px 24px rgba(245,200,66,0.4); transform:translateY(-1px); }
+
+  .course-meta { display:flex; gap:12px; font-size:0.78rem; color:var(--muted); padding-top:14px; border-top:1px solid var(--border); align-items:center; flex-wrap:wrap; }
+  .course-meta span { display:flex; align-items:center; gap:5px; }
+  .stars { color:var(--accent); }
+  .course-instructor { margin-left:auto; display:flex; align-items:center; gap:8px; }
+  .avatar { width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700; color:var(--bg); }
+
+  .add-card { background:var(--surface); border:2px dashed rgba(245,200,66,0.25); border-radius:var(--radius); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:340px; gap:14px; cursor:pointer; transition:all 0.3s; color:var(--muted); }
+  .add-card:hover { border-color:var(--accent); background:rgba(245,200,66,0.04); color:var(--accent); }
+  .add-icon { width:56px; height:56px; border-radius:50%; border:2px solid currentColor; display:flex; align-items:center; justify-content:center; font-size:1.5rem; transition:all 0.3s; }
+  .add-card:hover .add-icon { background:rgba(245,200,66,0.12); }
+  .add-card p { font-size:0.9rem; font-weight:500; }
+
+  .modal-overlay { position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:36px; width:100%; max-width:560px; max-height:90vh; overflow-y:auto; position:relative; animation:slideUp 0.3s ease; }
+  @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .modal-close { position:absolute; top:16px; right:16px; width:36px; height:36px; border-radius:50%; background:var(--surface2); border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; }
+  .modal-close:hover { background:var(--accent); color:var(--bg); }
+  .modal h2 { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:700; margin-bottom:8px; }
+  .modal .subtitle { font-size:0.875rem; color:var(--muted); margin-bottom:28px; }
+  .form-group { margin-bottom:18px; }
+  .form-group label { display:block; font-size:0.82rem; font-weight:600; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
+  .form-group input,.form-group textarea,.form-group select { width:100%; padding:12px 16px; border-radius:10px; background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.2s; resize:vertical; }
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus { border-color:rgba(245,200,66,0.5); }
+  .form-group textarea { min-height:80px; }
+  .form-group select option { background:var(--surface2); }
+  .form-hint { font-size:0.76rem; color:var(--muted); margin-top:6px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:8px; }
+
+  /* PRICE SECTION IN FORM */
+  .price-section { background:var(--surface2); border:1px solid rgba(245,200,66,0.15); border-radius:14px; padding:20px; margin-bottom:18px; }
+  .price-section-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .price-type-selector { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .price-type-btn { padding:14px; border-radius:10px; border:2px solid var(--border); background:transparent; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:600; cursor:pointer; transition:all 0.2s; text-align:center; }
+  .price-type-btn.sel-free { border-color:var(--green); background:rgba(34,197,94,0.1); color:var(--green); }
+  .price-type-btn.sel-paid { border-color:var(--accent); background:rgba(245,200,66,0.1); color:var(--accent); }
+  .price-fields { display:none; }
+  .price-fields.visible { display:block; }
+  .input-wrap { position:relative; }
+  .input-wrap .prefix { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.9rem; font-weight:600; pointer-events:none; }
+  .input-wrap input { padding-left:42px !important; }
+
+  .watch-modal { max-width:780px; }
+  .watch-video { width:100%; aspect-ratio:16/9; border-radius:10px; overflow:hidden; background:#000; margin-bottom:20px; }
+  .watch-video iframe { width:100%; height:100%; border:none; }
+  .watch-title { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; margin-bottom:12px; }
+  .watch-price-bar { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-radius:12px; background:var(--surface2); border:1px solid var(--border); margin-bottom:14px; }
+  .watch-price-label { font-size:0.8rem; color:var(--muted); margin-bottom:4px; }
+  .watch-price-value { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; }
+  .watch-info { display:flex; gap:20px; color:var(--muted); font-size:0.85rem; }
+
+  footer { margin-top:40px; padding:40px 48px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:0.85rem; }
+  footer strong { color:var(--accent); font-family:'Syne',sans-serif; }
+
+  .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--surface2); border:1px solid rgba(245,200,66,0.3); padding:12px 24px; border-radius:40px; font-size:0.875rem; font-weight:500; z-index:9999; opacity:0; transition:all 0.3s; white-space:nowrap; color:var(--text); }
+  .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+  @media(max-width:768px) {
+    header { padding:14px 20px; } nav { display:none; }
+    .hero { padding:60px 20px 40px; }
+    .stats { margin:40px 20px 0; flex-direction:column; }
+    .stat { border-right:none; border-bottom:1px solid var(--border); }
+    .stat:last-child { border-bottom:none; }
+    section { padding:60px 20px; }
+    footer { padding:30px 20px; flex-direction:column; gap:12px; text-align:center; }
+    .form-row,.price-type-selector { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">Code<span>Path</span></a>
+  <nav>
+    <a href="#" class="active">Início</a>
+    <a href="#">Categorias</a>
+    <a href="#">Sobre</a>
+  </nav>
+  <button class="header-btn" onclick="openAddModal()">+ Adicionar Curso</button>
+</header>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✦ Plataforma de Cursos Online</div>
+    <h1>Aprenda o que<br>você <em>quiser,</em><br>quando quiser.</h1>
+    <p>Sua plataforma pessoal de cursos em vídeo. Organize, compartilhe e assista ao seu conteúdo favorito.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('cursos').scrollIntoView({behavior:'smooth'})">Ver cursos</button>
+      <button class="btn-outline" onclick="openAddModal()">Adicionar curso</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Cursos disponíveis</div></div>
+  <div class="stat"><div class="stat-num" id="stat-categories">0</div><div class="stat-label">Categorias</div></div>
+  <div class="stat"><div class="stat-num" id="stat-free">0</div><div class="stat-label">Cursos gratuitos</div></div>
+  <div class="stat"><div class="stat-num" id="stat-paid">0</div><div class="stat-label">Cursos pagos</div></div>
+</div>
+
+<section id="cursos">
+  <div class="section-header">
+    <h2 class="section-title">Todos os Cursos</h2>
+    <a href="#" class="see-all" onclick="openAddModal();return false;">+ Novo curso →</a>
+  </div>
+  <div class="search-bar">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍  Buscar cursos..." oninput="filterCourses()">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">Todos</button>
+    <button class="filter-btn" onclick="setFilter(this,'free')">🟢 Gratuitos</button>
+    <button class="filter-btn" onclick="setFilter(this,'paid')">💰 Pagos</button>
+    <button class="filter-btn" onclick="setFilter(this,'Programação')">Programação</button>
+    <button class="filter-btn" onclick="setFilter(this,'Design')">Design</button>
+    <button class="filter-btn" onclick="setFilter(this,'Marketing')">Marketing</button>
+  </div>
+  <div class="courses-grid" id="coursesGrid"></div>
+</section>
+
+<footer>
+  <div>Feito com ♥ — <strong>CodePath</strong></div>
+  <div>Seus cursos ficam salvos automaticamente 🔒</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+    <h2 id="modalTitle">Adicionar Curso</h2>
+    <p class="subtitle" id="modalSubtitle">Cole o link do YouTube para adicionar ao catálogo.</p>
+
+    <div class="form-group">
+      <label>Título do Curso *</label>
+      <input type="text" id="f_title" placeholder="Ex: JavaScript do Zero ao Avançado">
+    </div>
+    <div class="form-group">
+      <label>URL do Vídeo (YouTube) *</label>
+      <input type="text" id="f_url" placeholder="https://youtube.com/watch?v=...">
+      <div class="form-hint">Cole o link do YouTube, o embed é gerado automaticamente.</div>
+    </div>
+    <div class="form-group">
+      <label>Descrição</label>
+      <textarea id="f_desc" placeholder="Descreva o que o aluno vai aprender..."></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Categoria</label>
+        <select id="f_cat">
+          <option>Programação</option><option>Design</option><option>Marketing</option>
+          <option>Negócios</option><option>Idiomas</option><option>Música</option>
+          <option>Fotografia</option><option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Duração</label>
+        <input type="text" id="f_dur" placeholder="Ex: 12h 30min">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Instrutor</label>
+        <input type="text" id="f_inst" placeholder="Nome do instrutor">
+      </div>
+      <div class="form-group">
+        <label>Badge</label>
+        <select id="f_badge">
+          <option value="">Nenhum</option><option value="new">Novo</option>
+          <option value="hot">Em Alta</option><option value="free">Grátis</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ══ PREÇO ══ -->
+    <div class="price-section">
+      <div class="price-section-title">💰 Preço do Curso</div>
+      <div class="price-type-selector">
+        <button class="price-type-btn sel-free" id="btn-free" onclick="selectPriceType('free')">🟢 Gratuito</button>
+        <button class="price-type-btn" id="btn-paid" onclick="selectPriceType('paid')">💳 Pago</button>
+      </div>
+      <div class="price-fields" id="price-fields">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Preço (R$) *</label>
+            <div class="input-wrap">
+              <span class="prefix">R$</span>
+              <input type="number" id="f_price" placeholder="97,00" min="0" step="0.01">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Preço Original (desconto)</label>
+            <div class="input-wrap">
+              <span class="prefix">R$</span>
+              <input type="number" id="f_price_orig" placeholder="197,00" min="0" step="0.01">
+            </div>
+            <div class="form-hint">Deixe em branco se não quiser mostrar desconto.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Link de Compra / Checkout *</label>
+          <input type="text" id="f_buy_link" placeholder="https://hotmart.com/seu-produto">
+          <div class="form-hint">Link que abre ao clicar em "Comprar agora" (Hotmart, Kiwify, etc).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-outline" style="padding:11px 24px;font-size:0.875rem" onclick="closeModal('addModal')">Cancelar</button>
+      <button class="btn-primary" style="padding:11px 24px;font-size:0.875rem" onclick="saveCourse()">Salvar Curso</button>
+    </div>
+  </div>
+</div>
+
+<!-- WATCH MODAL -->
+<div class="modal-overlay" id="watchModal">
+  <div class="modal watch-modal">
+    <button class="modal-close" onclick="closeModal('watchModal');stopVideo()">✕</button>
+    <div class="watch-video">
+      <iframe id="watchIframe" src="" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+    </div>
+    <div class="watch-title" id="watchTitle"></div>
+    <div class="watch-price-bar" id="watchPriceBar">
+      <div>
+        <div class="watch-price-label">Valor do curso</div>
+        <div class="watch-price-value" id="watchPriceVal"></div>
+      </div>
+      <button class="btn-primary" id="watchBuyBtn" style="padding:12px 28px;font-size:0.9rem">Comprar agora</button>
+    </div>
+    <div class="watch-info">
+      <span id="watchCategory"></span>
+      <span id="watchDuration"></span>
+      <span id="watchInstructor"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+let courses = JSON.parse(localStorage.getItem('codepath_v2') || '[]');
+let editIndex = -1;
+let currentFilter = 'all';
+let selectedPriceType = 'free';
+
+if (!courses.length) {
+  courses = [
+    { title:'HTML e CSS para Iniciantes', url:'https://www.youtube.com/watch?v=Ejkb_YpuHWs', desc:'Aprenda os fundamentos do desenvolvimento web com HTML5 e CSS3 do zero ao profissional.', category:'Programação', duration:'8h 20min', instructor:'Gustavo Guanabara', badge:'free', rating:'4.9', students:'12k', priceType:'free', price:0, priceOrig:'', buyLink:'' },
+    { title:'JavaScript Moderno — ES6+', url:'https://www.youtube.com/watch?v=BXqUH86F-kA', desc:'Domine o JavaScript moderno com Promises, async/await, módulos e muito mais.', category:'Programação', duration:'14h 45min', instructor:'Matheus Battisti', badge:'hot', rating:'4.8', students:'8.3k', priceType:'paid', price:97, priceOrig:197, buyLink:'https://exemplo.com/checkout' },
+    { title:'Design no Figma — Completo', url:'https://www.youtube.com/watch?v=FTFaQWZBqQ8', desc:'Do básico ao avançado no Figma: componentes, protótipos e design systems.', category:'Design', duration:'6h 10min', instructor:'Lucas Okamoto', badge:'new', rating:'4.7', students:'5.1k', priceType:'paid', price:47, priceOrig:97, buyLink:'https://exemplo.com/figma' }
+  ];
+  save();
+}
+
+function selectPriceType(type) {
+  selectedPriceType = type;
+  document.getElementById('btn-free').className = 'price-type-btn' + (type==='free' ? ' sel-free' : '');
+  document.getElementById('btn-paid').className = 'price-type-btn' + (type==='paid' ? ' sel-paid' : '');
+  document.getElementById('price-fields').classList.toggle('visible', type==='paid');
+}
+
+function fmtBRL(v) { return 'R$ ' + parseFloat(v).toFixed(2).replace('.',','); }
+function discount(p,o) { if(!o||o<=p) return null; return Math.round((1-p/o)*100); }
+function ytId(u) { const r=u.match(/(?:youtube\.com\/(?:watch\?.*v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/); return r?r[1]:null; }
+function embedUrl(u) { const id=ytId(u); return id?`https://www.youtube.com/embed/${id}?rel=0`:u; }
+function thumb(u) { const id=ytId(u); return id?`https://img.youtube.com/vi/${id}/mqdefault.jpg`:null; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function save() { localStorage.setItem('codepath_v2',JSON.stringify(courses)); updateStats(); }
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = courses.length;
+  document.getElementById('stat-categories').textContent = new Set(courses.map(c=>c.category)).size;
+  document.getElementById('stat-free').textContent = courses.filter(c=>c.priceType==='free').length;
+  document.getElementById('stat-paid').textContent = courses.filter(c=>c.priceType==='paid').length;
+}
+
+function render(list) {
+  const grid = document.getElementById('coursesGrid');
+  grid.innerHTML = '';
+  list.forEach(c => {
+    const i = courses.indexOf(c);
+    const t = thumb(c.url);
+    const bm = {new:['badge-new','Novo'],hot:['badge-hot','Em Alta'],free:['badge-free','Grátis']};
+    const badge = c.badge&&bm[c.badge] ? `<span class="course-badge ${bm[c.badge][0]}">${bm[c.badge][1]}</span>` : '';
+    const init = (c.instructor||'A').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const isFree = c.priceType==='free';
+    const disc = !isFree ? discount(c.price,c.priceOrig) : null;
+    const thumbHtml = t
+      ? `<img src="${t}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<div class=\\"thumb-placeholder\\"><div class=\\"play-icon\\">▶</div></div>'">`
+      : `<div class="thumb-placeholder"><div class="play-icon">▶</div></div>`;
+
+    const card = document.createElement('div');
+    card.className = 'course-card';
+    card.innerHTML = `
+      <div class="course-thumb">${thumbHtml}${badge}</div>
+      <div class="course-body">
+        <div class="course-category">${esc(c.category)}</div>
+        <div class="course-title">${esc(c.title)}</div>
+        ${c.desc?`<div class="course-desc">${esc(c.desc)}</div>`:''}
+        <div class="course-price-row">
+          <div class="price-tag">
+            <span class="price-value ${isFree?'free':'paid'}">${isFree?'Grátis':fmtBRL(c.price)}</span>
+            ${!isFree&&c.priceOrig?`<span class="price-original">${fmtBRL(c.priceOrig)}</span>`:''}
+          </div>
+          ${disc?`<span class="price-discount">-${disc}% OFF</span>`:''}
+        </div>
+        <button class="btn-enroll ${isFree?'free-btn':'paid-btn'}" onclick="event.stopPropagation();${isFree?`watchCourse(${i})`:c.buyLink?`window.open('${esc(c.buyLink)}','_blank')`:`showToast('⚠️ Link de compra não configurado')`}">
+          ${isFree?'▶ Assistir grátis':'💳 Comprar agora'}
+        </button>
+        <div class="course-meta">
+          ${c.rating?`<span><span class="stars">★</span> ${c.rating}</span>`:''}
+          ${c.duration?`<span>⏱ ${esc(c.duration)}</span>`:''}
+          ${c.students?`<span>👥 ${esc(c.students)}</span>`:''}
+          ${c.instructor?`<div class="course-instructor"><div class="avatar">${init}</div><span style="font-size:0.78rem">${esc(c.instructor)}</span></div>`:''}
+        </div>
+      </div>`;
+    card.addEventListener('click', () => watchCourse(i));
+    card.addEventListener('contextmenu', e => { e.preventDefault(); showCardMenu(i,e.clientX,e.clientY); });
+    grid.appendChild(card);
+  });
+  const add = document.createElement('div');
+  add.className = 'add-card';
+  add.innerHTML = `<div class="add-icon">+</div><p>Adicionar novo curso</p>`;
+  add.onclick = openAddModal;
+  grid.appendChild(add);
+}
+
+function setFilter(btn,val) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); currentFilter=val; filterCourses();
+}
+function filterCourses() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = courses.filter(c => {
+    let m = true;
+    if (currentFilter==='free') m = c.priceType==='free';
+    else if (currentFilter==='paid') m = c.priceType==='paid';
+    else if (currentFilter!=='all') m = c.category===currentFilter;
+    return m && (!q || c.title.toLowerCase().includes(q)||(c.desc||'').toLowerCase().includes(q)||(c.instructor||'').toLowerCase().includes(q));
+  });
+  render(filtered);
+}
+
+function watchCourse(i) {
+  const c = courses[i];
+  document.getElementById('watchIframe').src = embedUrl(c.url);
+  document.getElementById('watchTitle').textContent = c.title;
+  document.getElementById('watchCategory').textContent = c.category||'';
+  document.getElementById('watchDuration').textContent = c.duration?'⏱ '+c.duration:'';
+  document.getElementById('watchInstructor').textContent = c.instructor?'👤 '+c.instructor:'';
+  const pv = document.getElementById('watchPriceVal');
+  const bb = document.getElementById('watchBuyBtn');
+  if (c.priceType==='free') {
+    pv.textContent='Grátis'; pv.style.color='var(--green)';
+    bb.textContent='▶ Assistindo...'; bb.style.background='var(--green)'; bb.onclick=()=>{};
+  } else {
+    pv.textContent=fmtBRL(c.price); pv.style.color='var(--accent)';
+    bb.textContent='💳 Comprar agora'; bb.style.background='';
+    bb.onclick=()=>{ if(c.buyLink) window.open(c.buyLink,'_blank'); else showToast('⚠️ Link de compra não configurado'); };
+  }
+  openModal('watchModal');
+}
+function stopVideo() { document.getElementById('watchIframe').src=''; }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click',e=>{ if(e.target===m){closeModal(m.id);stopVideo();} }));
+
+function openAddModal(index=-1) {
+  editIndex=index;
+  const c=index>=0?courses[index]:{};
+  document.getElementById('modalTitle').textContent=index>=0?'Editar Curso':'Adicionar Curso';
+  document.getElementById('modalSubtitle').textContent=index>=0?'Edite as informações do curso.':'Cole o link do YouTube para adicionar ao catálogo.';
+  document.getElementById('f_title').value=c.title||'';
+  document.getElementById('f_url').value=c.url||'';
+  document.getElementById('f_desc').value=c.desc||'';
+  document.getElementById('f_cat').value=c.category||'Programação';
+  document.getElementById('f_dur').value=c.duration||'';
+  document.getElementById('f_inst').value=c.instructor||'';
+  document.getElementById('f_badge').value=c.badge||'';
+  document.getElementById('f_price').value=c.price||'';
+  document.getElementById('f_price_orig').value=c.priceOrig||'';
+  document.getElementById('f_buy_link').value=c.buyLink||'';
+  selectPriceType(c.priceType||'free');
+  openModal('addModal');
+}
+
+function saveCourse() {
+  const title=document.getElementById('f_title').value.trim();
+  const url=document.getElementById('f_url').value.trim();
+  if(!title){showToast('⚠️ Informe o título do curso');return;}
+  if(!url){showToast('⚠️ Informe a URL do vídeo');return;}
+  if(selectedPriceType==='paid'&&!document.getElementById('f_price').value){showToast('⚠️ Informe o preço do curso');return;}
+
+  const c={
+    title,url,
+    desc:document.getElementById('f_desc').value.trim(),
+    category:document.getElementById('f_cat').value,
+    duration:document.getElementById('f_dur').value.trim(),
+    instructor:document.getElementById('f_inst').value.trim(),
+    badge:document.getElementById('f_badge').value,
+    rating:editIndex>=0?(courses[editIndex].rating||''):'',
+    students:editIndex>=0?(courses[editIndex].students||''):'',
+    priceType:selectedPriceType,
+    price:selectedPriceType==='paid'?(parseFloat(document.getElementById('f_price').value)||0):0,
+    priceOrig:selectedPriceType==='paid'?(parseFloat(document.getElementById('f_price_orig').value)||''):'',
+    buyLink:selectedPriceType==='paid'?document.getElementById('f_buy_link').value.trim():'',
+  };
+
+  if(editIndex>=0){courses[editIndex]=c;showToast('✅ Curso atualizado!');}
+  else{courses.unshift(c);showToast('🎉 Curso adicionado!');}
+  save();closeModal('addModal');filterCourses();
+}
+
+let menuEl=null;
+function showCardMenu(i,x,y) {
+  removeMenu();
+  menuEl=document.createElement('div');
+  menuEl.style.cssText=`position:fixed;z-index:9999;top:${y}px;left:${x}px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 10px 40px rgba(0,0,0,0.5);min-width:160px;`;
+  [['▶  Assistir',()=>watchCourse(i)],['✏️  Editar',()=>openAddModal(i)],['🗑  Remover',()=>deleteCourse(i)]].forEach(([l,f])=>{
+    const b=document.createElement('button');
+    b.textContent=l;b.style.cssText=`display:block;width:100%;padding:10px 14px;background:none;border:none;color:var(--text);text-align:left;cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.875rem;`;
+    b.onmouseenter=()=>b.style.background='var(--surface)';b.onmouseleave=()=>b.style.background='none';
+    b.onclick=()=>{f();removeMenu();};menuEl.appendChild(b);
+  });
+  document.body.appendChild(menuEl);
+  setTimeout(()=>document.addEventListener('click',removeMenu,{once:true}),10);
+}
+function removeMenu(){if(menuEl){menuEl.remove();menuEl=null;}}
+function deleteCourse(i){
+  if(confirm(`Remover "${courses[i].title}"?`)){courses.splice(i,1);save();filterCourses();showToast('🗑 Curso removido');}
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+updateStats();filterCourses();
+</script>
+</body>
+</html>
