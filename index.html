@@ -5,16 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CodePath — Aprenda do seu jeito</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-
-<!-- ══════════════════════════════════════════════════
-     FIREBASE SDK — Banco de dados em tempo real
-     Substitua firebaseConfig com seus dados!
-     console.firebase.google.com
-════════════════════════════════════════════════════ -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <style>
   :root {
     --bg:#0a0a0f; --surface:#13131a; --surface2:#1c1c28;
@@ -25,52 +15,11 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 
-  /* ── LOGIN SCREEN ── */
-  #login-screen{
-    position:fixed;inset:0;z-index:9999;
-    background:linear-gradient(135deg,#0a0a0f,#13131a,#0f3460);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .login-card{
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:24px;padding:56px 44px;
-    width:100%;max-width:420px;text-align:center;
-    box-shadow:0 30px 60px rgba(0,0,0,0.6);
-  }
-  .login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--accent);margin-bottom:6px;}
-  .login-logo span{color:var(--accent2);}
-  .login-tagline{color:var(--muted);font-size:0.9rem;margin-bottom:40px;}
-  .btn-google-login{
-    display:flex;align-items:center;justify-content:center;gap:14px;
-    width:100%;padding:16px 24px;
-    background:#fff;color:#333;border:none;border-radius:14px;
-    font-size:15px;font-weight:700;cursor:pointer;
-    transition:all 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.3);
-    font-family:'DM Sans',sans-serif;
-  }
-  .btn-google-login:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.4);}
-  .login-info{color:rgba(255,255,255,0.25);font-size:11px;margin-top:20px;line-height:1.6;}
-
   /* ── LOADING ── */
-  #loading-screen{
-    position:fixed;inset:0;z-index:9998;
-    background:var(--bg);display:flex;
-    align-items:center;justify-content:center;
-    flex-direction:column;gap:16px;
-  }
-  .spinner{
-    width:40px;height:40px;border-radius:50%;
-    border:3px solid var(--surface2);
-    border-top-color:var(--accent);
-    animation:spin 0.8s linear infinite;
-  }
+  #loading-screen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+  .spinner{width:40px;height:40px;border-radius:50%;border:3px solid var(--surface2);border-top-color:var(--accent);animation:spin 0.8s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading-text{color:var(--muted);font-size:0.85rem;}
-
-  /* ── APP ── */
-  #app{display:none;}
 
   header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
   .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.5px;text-decoration:none;}
@@ -80,23 +29,16 @@
   nav a:hover{color:var(--text);background:var(--surface2);}
   nav a.active{color:var(--bg);background:var(--accent);font-weight:600;}
 
-  /* User info no header */
-  .header-right{display:flex;align-items:center;gap:10px;}
-  .user-info{display:flex;align-items:center;gap:8px;}
-  .user-avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;}
-  .user-name{font-size:0.82rem;font-weight:500;color:var(--muted);}
-  .admin-badge{background:rgba(245,200,66,0.15);color:var(--accent);border:1px solid rgba(245,200,66,0.3);border-radius:20px;padding:2px 8px;font-size:0.7rem;font-weight:700;}
-  .header-btn{padding:9px 22px;border-radius:40px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:500;cursor:pointer;transition:all 0.2s;}
-  .header-btn:hover{background:var(--accent);color:var(--bg);border-color:var(--accent);}
-  .btn-logout{padding:8px 16px;border-radius:40px;background:transparent;border:1px solid rgba(255,59,59,0.3);color:#ff6b6b;font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;transition:all 0.2s;}
-  .btn-logout:hover{background:rgba(255,59,59,0.15);}
+  /* Sync badge */
+  .sync-badge{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--muted);}
+  .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
   .hero{padding:100px 48px 80px;position:relative;overflow:hidden;min-height:480px;display:flex;align-items:center;}
   .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 60% at 70% 50%,rgba(245,200,66,0.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(255,107,53,0.1) 0%,transparent 60%);}
   .hero-content{position:relative;z-index:1;max-width:640px;}
   .hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:40px;background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.25);font-size:0.8rem;font-weight:500;color:var(--accent);margin-bottom:28px;}
   .hero-tag::before{content:'●';font-size:0.5rem;animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
   h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;}
   h1 em{font-style:normal;color:var(--accent);}
   .hero p{font-size:1.1rem;color:rgba(240,237,232,0.65);line-height:1.7;max-width:500px;margin-bottom:36px;}
@@ -104,7 +46,7 @@
   .btn-primary{padding:14px 30px;border-radius:40px;background:var(--accent);color:var(--bg);font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 24px rgba(245,200,66,0.3);}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(245,200,66,0.4);}
   .btn-outline{padding:14px 30px;border-radius:40px;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
-  .btn-outline:hover{background:var(--surface2);border-color:rgba(255,255,255,0.15);}
+  .btn-outline:hover{background:var(--surface2);}
 
   .stats{display:flex;margin:60px 48px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface);}
   .stat{flex:1;padding:28px 32px;border-right:1px solid var(--border);transition:background 0.2s;}
@@ -116,8 +58,6 @@
   section{padding:80px 48px;}
   .section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:40px;}
   .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-0.5px;}
-  .see-all{font-size:0.875rem;color:var(--accent);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:4px;transition:gap 0.2s;}
-  .see-all:hover{gap:8px;}
 
   .search-bar{display:flex;gap:12px;margin-bottom:36px;flex-wrap:wrap;}
   .search-input{flex:1;min-width:260px;padding:12px 20px;border-radius:40px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;}
@@ -128,9 +68,9 @@
 
   .courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
   .course-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all 0.3s;position:relative;display:flex;flex-direction:column;}
-  .course-card:hover{transform:translateY(-6px);border-color:rgba(245,200,66,0.3);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(245,200,66,0.15);}
+  .course-card:hover{transform:translateY(-6px);border-color:rgba(245,200,66,0.3);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
   .course-thumb{width:100%;aspect-ratio:16/9;background:var(--surface2);position:relative;overflow:hidden;}
-  .thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;background:linear-gradient(135deg,var(--surface2) 0%,#1a1a2e 100%);}
+  .thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--surface2),#1a1a2e);}
   .play-icon{width:52px;height:52px;background:rgba(245,200,66,0.15);border:2px solid rgba(245,200,66,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 0.3s;}
   .course-card:hover .play-icon{background:var(--accent);border-color:var(--accent);color:var(--bg);}
   .course-badge{position:absolute;top:12px;left:12px;padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
@@ -139,7 +79,7 @@
   .badge-free{background:var(--green);color:white;}
   .course-body{padding:20px;flex:1;display:flex;flex-direction:column;}
   .course-category{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin-bottom:8px;}
-  .course-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:10px;color:var(--text);}
+  .course-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:10px;}
   .course-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
   .course-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:12px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);}
   .price-tag{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
@@ -154,47 +94,23 @@
   .btn-enroll.paid-btn{background:var(--accent);color:var(--bg);box-shadow:0 4px 16px rgba(245,200,66,0.25);}
   .btn-enroll.paid-btn:hover{box-shadow:0 6px 24px rgba(245,200,66,0.4);transform:translateY(-1px);}
   .course-meta{display:flex;gap:12px;font-size:0.78rem;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);align-items:center;flex-wrap:wrap;}
-  .course-meta span{display:flex;align-items:center;gap:5px;}
   .stars{color:var(--accent);}
   .course-instructor{margin-left:auto;display:flex;align-items:center;gap:8px;}
-  .avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:var(--bg);}
-  .add-card{background:var(--surface);border:2px dashed rgba(245,200,66,0.25);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:340px;gap:14px;cursor:pointer;transition:all 0.3s;color:var(--muted);}
-  .add-card:hover{border-color:var(--accent);background:rgba(245,200,66,0.04);color:var(--accent);}
-  .add-icon{width:56px;height:56px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:all 0.3s;}
+  .avatar-small{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:var(--bg);}
 
-  /* Sync indicator */
-  .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:6px;animation:pulse 2s infinite;}
-  .sync-label{font-size:0.75rem;color:var(--muted);display:flex;align-items:center;}
+  /* Info box sobre como adicionar cursos */
+  .github-info{background:var(--surface);border:1px solid rgba(245,200,66,0.2);border-radius:var(--radius);padding:24px 28px;margin-bottom:32px;display:flex;align-items:flex-start;gap:16px;}
+  .github-info-icon{font-size:2rem;flex-shrink:0;}
+  .github-info h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:6px;}
+  .github-info p{font-size:0.85rem;color:var(--muted);line-height:1.6;}
+  .github-info code{background:var(--surface2);color:var(--accent);padding:2px 8px;border-radius:6px;font-size:0.8rem;}
 
   .modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.open{display:flex;}
-  .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative;animation:slideUp 0.3s ease;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;position:relative;animation:slideUp 0.3s ease;}
   @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
   .modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:var(--surface2);border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
   .modal-close:hover{background:var(--accent);color:var(--bg);}
-  .modal h2{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:8px;}
-  .modal .subtitle{font-size:0.875rem;color:var(--muted);margin-bottom:28px;}
-  .form-group{margin-bottom:18px;}
-  .form-group label{display:block;font-size:0.82rem;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
-  .form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 16px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;resize:vertical;}
-  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(245,200,66,0.5);}
-  .form-group textarea{min-height:80px;}
-  .form-group select option{background:var(--surface2);}
-  .form-hint{font-size:0.76rem;color:var(--muted);margin-top:6px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;}
-  .price-section{background:var(--surface2);border:1px solid rgba(245,200,66,0.15);border-radius:14px;padding:20px;margin-bottom:18px;}
-  .price-section-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:16px;}
-  .price-type-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-  .price-type-btn{padding:14px;border-radius:10px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center;}
-  .price-type-btn.sel-free{border-color:var(--green);background:rgba(34,197,94,0.1);color:var(--green);}
-  .price-type-btn.sel-paid{border-color:var(--accent);background:rgba(245,200,66,0.1);color:var(--accent);}
-  .price-fields{display:none;}
-  .price-fields.visible{display:block;}
-  .input-wrap{position:relative;}
-  .input-wrap .prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;font-weight:600;pointer-events:none;}
-  .input-wrap input{padding-left:42px!important;}
-  .watch-modal{max-width:780px;}
   .watch-video{width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000;margin-bottom:20px;}
   .watch-video iframe{width:100%;height:100%;border:none;}
   .watch-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:12px;}
@@ -202,6 +118,12 @@
   .watch-price-label{font-size:0.8rem;color:var(--muted);margin-bottom:4px;}
   .watch-price-value{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;}
   .watch-info{display:flex;gap:20px;color:var(--muted);font-size:0.85rem;}
+
+  /* Error state */
+  .error-box{text-align:center;padding:60px 20px;color:var(--muted);}
+  .error-box h3{font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--accent2);margin-bottom:10px;}
+  .error-box code{background:var(--surface2);color:var(--text);padding:10px 16px;border-radius:8px;font-size:0.8rem;display:block;margin:16px auto;max-width:500px;word-break:break-all;}
+
   footer{margin-top:40px;padding:40px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:0.85rem;}
   footer strong{color:var(--accent);font-family:'Syne',sans-serif;}
   .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid rgba(245,200,66,0.3);padding:12px 24px;border-radius:40px;font-size:0.875rem;font-weight:500;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;color:var(--text);}
@@ -214,340 +136,160 @@
     .stat:last-child{border-bottom:none;}
     section{padding:60px 20px;}
     footer{padding:30px 20px;flex-direction:column;gap:12px;text-align:center;}
-    .form-row,.price-type-selector{grid-template-columns:1fr;}
   }
 </style>
 </head>
 <body>
 
-<!-- ══ TELA DE LOADING ══ -->
 <div id="loading-screen">
   <div class="spinner"></div>
-  <div class="loading-text">Carregando...</div>
+  <div class="loading-text">Carregando cursos...</div>
 </div>
 
-<!-- ══ TELA DE LOGIN ══ -->
-<div id="login-screen" style="display:none;">
-  <div class="login-card">
-    <div class="login-logo">Code<span>Path</span></div>
-    <p class="login-tagline">Sua plataforma de cursos online</p>
+<header>
+  <a class="logo" href="#">Code<span>Path</span></a>
+  <nav>
+    <a href="#" class="active">Início</a>
+    <a href="#">Categorias</a>
+    <a href="#">Sobre</a>
+  </nav>
+  <div class="sync-badge">
+    <span class="sync-dot"></span>
+    <span id="sync-label">Carregando...</span>
+  </div>
+</header>
 
-    <button class="btn-google-login" onclick="loginGoogle()">
-      <svg width="22" height="22" viewBox="0 0 24 24">
-        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-      </svg>
-      Entrar com Google
-    </button>
-
-    <p class="login-info">
-      🔒 Acesso restrito.<br>
-      Faça login com sua conta Google para continuar.
-    </p>
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✦ Plataforma de Cursos Online</div>
+    <h1>Aprenda o que<br>você <em>quiser,</em><br>quando quiser.</h1>
+    <p>Sua plataforma pessoal de cursos em vídeo. Organize, compartilhe e assista ao seu conteúdo favorito.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('cursos').scrollIntoView({behavior:'smooth'})">Ver cursos</button>
+      <button class="btn-outline" onclick="showGithubInfo()">Como adicionar cursos?</button>
+    </div>
   </div>
 </div>
 
-<!-- ══ APP PRINCIPAL ══ -->
-<div id="app">
-  <header>
-    <a class="logo" href="#">Code<span>Path</span></a>
-    <nav>
-      <a href="#" class="active">Início</a>
-      <a href="#">Categorias</a>
-      <a href="#">Sobre</a>
-    </nav>
-    <div class="header-right">
-      <div class="sync-label"><span class="sync-dot"></span>Sincronizado</div>
-      <div class="user-info">
-        <img class="user-avatar" id="user-avatar" src="" alt="">
-        <span class="user-name" id="user-name"></span>
-        <span class="admin-badge" id="admin-badge" style="display:none">ADMIN</span>
-      </div>
-      <button class="header-btn" id="btn-add-course" style="display:none" onclick="openAddModal()">+ Adicionar Curso</button>
-      <button class="btn-logout" onclick="logout()">Sair</button>
-    </div>
-  </header>
-
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-tag">✦ Plataforma de Cursos Online</div>
-      <h1>Aprenda o que<br>você <em>quiser,</em><br>quando quiser.</h1>
-      <p>Sua plataforma pessoal de cursos em vídeo. Organize, compartilhe e assista ao seu conteúdo favorito.</p>
-      <div class="hero-btns">
-        <button class="btn-primary" onclick="document.getElementById('cursos').scrollIntoView({behavior:'smooth'})">Ver cursos</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="stats">
-    <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Cursos disponíveis</div></div>
-    <div class="stat"><div class="stat-num" id="stat-categories">0</div><div class="stat-label">Categorias</div></div>
-    <div class="stat"><div class="stat-num" id="stat-free">0</div><div class="stat-label">Cursos gratuitos</div></div>
-    <div class="stat"><div class="stat-num" id="stat-paid">0</div><div class="stat-label">Cursos pagos</div></div>
-  </div>
-
-  <section id="cursos">
-    <div class="section-header">
-      <h2 class="section-title">Todos os Cursos</h2>
-      <a href="#" class="see-all" id="link-add" style="display:none" onclick="openAddModal();return false;">+ Novo curso →</a>
-    </div>
-    <div class="search-bar">
-      <input type="text" class="search-input" id="searchInput" placeholder="🔍  Buscar cursos..." oninput="filterCourses()">
-      <button class="filter-btn active" onclick="setFilter(this,'all')">Todos</button>
-      <button class="filter-btn" onclick="setFilter(this,'free')">🟢 Gratuitos</button>
-      <button class="filter-btn" onclick="setFilter(this,'paid')">💰 Pagos</button>
-      <button class="filter-btn" onclick="setFilter(this,'Programação')">Programação</button>
-      <button class="filter-btn" onclick="setFilter(this,'Design')">Design</button>
-    </div>
-    <div class="courses-grid" id="coursesGrid">
-      <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);">
-        <div class="spinner" style="margin:0 auto 16px"></div>
-        Carregando cursos...
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div>Feito com ♥ — <strong>CodePath</strong></div>
-    <div>🔄 Cursos sincronizados em tempo real</div>
-  </footer>
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Cursos disponíveis</div></div>
+  <div class="stat"><div class="stat-num" id="stat-categories">0</div><div class="stat-label">Categorias</div></div>
+  <div class="stat"><div class="stat-num" id="stat-free">0</div><div class="stat-label">Cursos gratuitos</div></div>
+  <div class="stat"><div class="stat-num" id="stat-paid">0</div><div class="stat-label">Cursos pagos</div></div>
 </div>
+
+<section id="cursos">
+  <div class="section-header">
+    <h2 class="section-title">Todos os Cursos</h2>
+  </div>
+
+  <!-- Info como adicionar cursos -->
+  <div class="github-info" id="github-info" style="display:none">
+    <div class="github-info-icon">📝</div>
+    <div>
+      <h3>Como adicionar cursos?</h3>
+      <p>
+        Edite o arquivo <code>courses.json</code> no seu repositório GitHub
+        e os cursos aparecem aqui automaticamente para todo mundo!<br><br>
+        Adicione um novo objeto no array JSON com os campos:
+        <code>title</code>, <code>url</code>, <code>category</code>, <code>priceType</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍  Buscar cursos..." oninput="filterCourses()">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">Todos</button>
+    <button class="filter-btn" onclick="setFilter(this,'free')">🟢 Gratuitos</button>
+    <button class="filter-btn" onclick="setFilter(this,'paid')">💰 Pagos</button>
+    <button class="filter-btn" onclick="setFilter(this,'Programação')">Programação</button>
+    <button class="filter-btn" onclick="setFilter(this,'Design')">Design</button>
+    <button class="filter-btn" onclick="setFilter(this,'Marketing')">Marketing</button>
+  </div>
+
+  <div class="courses-grid" id="coursesGrid"></div>
+</section>
+
+<footer>
+  <div>Feito com ♥ — <strong>CodePath</strong></div>
+  <div>📦 Cursos carregados do GitHub</div>
+</footer>
 
 <div class="toast" id="toast"></div>
 
-<!-- ADD/EDIT MODAL -->
-<div class="modal-overlay" id="addModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('addModal')">✕</button>
-    <h2 id="modalTitle">Adicionar Curso</h2>
-    <p class="subtitle" id="modalSubtitle">Cole o link do YouTube para adicionar ao catálogo.</p>
-    <div class="form-group"><label>Título *</label><input type="text" id="f_title" placeholder="Ex: JavaScript do Zero ao Avançado"></div>
-    <div class="form-group"><label>URL do Vídeo (YouTube) *</label><input type="text" id="f_url" placeholder="https://youtube.com/watch?v=..."><div class="form-hint">Cole o link do YouTube.</div></div>
-    <div class="form-group"><label>Descrição</label><textarea id="f_desc" placeholder="Descreva o que o aluno vai aprender..."></textarea></div>
-    <div class="form-row">
-      <div class="form-group"><label>Categoria</label><select id="f_cat"><option>Programação</option><option>Design</option><option>Marketing</option><option>Negócios</option><option>Idiomas</option><option>Música</option><option>Fotografia</option><option>Outro</option></select></div>
-      <div class="form-group"><label>Duração</label><input type="text" id="f_dur" placeholder="Ex: 12h 30min"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Instrutor</label><input type="text" id="f_inst" placeholder="Nome do instrutor"></div>
-      <div class="form-group"><label>Badge</label><select id="f_badge"><option value="">Nenhum</option><option value="new">Novo</option><option value="hot">Em Alta</option><option value="free">Grátis</option></select></div>
-    </div>
-    <div class="price-section">
-      <div class="price-section-title">💰 Preço</div>
-      <div class="price-type-selector">
-        <button class="price-type-btn sel-free" id="btn-free" onclick="selectPriceType('free')">🟢 Gratuito</button>
-        <button class="price-type-btn" id="btn-paid" onclick="selectPriceType('paid')">💳 Pago</button>
-      </div>
-      <div class="price-fields" id="price-fields">
-        <div class="form-row">
-          <div class="form-group"><label>Preço (R$) *</label><div class="input-wrap"><span class="prefix">R$</span><input type="number" id="f_price" placeholder="97,00" min="0" step="0.01"></div></div>
-          <div class="form-group"><label>Preço Original</label><div class="input-wrap"><span class="prefix">R$</span><input type="number" id="f_price_orig" placeholder="197,00" min="0" step="0.01"></div></div>
-        </div>
-        <div class="form-group"><label>Link de Compra *</label><input type="text" id="f_buy_link" placeholder="https://hotmart.com/seu-produto"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-outline" style="padding:11px 24px;font-size:0.875rem" onclick="closeModal('addModal')">Cancelar</button>
-      <button class="btn-primary" style="padding:11px 24px;font-size:0.875rem" onclick="saveCourse()">Salvar Curso</button>
-    </div>
-  </div>
-</div>
-
 <!-- WATCH MODAL -->
 <div class="modal-overlay" id="watchModal">
-  <div class="modal watch-modal">
+  <div class="modal">
     <button class="modal-close" onclick="closeModal('watchModal');stopVideo()">✕</button>
-    <div class="watch-video"><iframe id="watchIframe" src="" allowfullscreen></iframe></div>
-    <div class="watch-title" id="watchTitle"></div>
-    <div class="watch-price-bar" id="watchPriceBar">
-      <div><div class="watch-price-label">Valor do curso</div><div class="watch-price-value" id="watchPriceVal"></div></div>
-      <button class="btn-primary" id="watchBuyBtn" style="padding:12px 28px;font-size:0.9rem">Comprar agora</button>
+    <div class="watch-video">
+      <iframe id="watchIframe" src="" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
     </div>
-    <div class="watch-info"><span id="watchCategory"></span><span id="watchDuration"></span><span id="watchInstructor"></span></div>
+    <div class="watch-title" id="watchTitle"></div>
+    <div class="watch-price-bar">
+      <div>
+        <div class="watch-price-label">Valor do curso</div>
+        <div class="watch-price-value" id="watchPriceVal"></div>
+      </div>
+      <button class="btn-primary" id="watchBuyBtn" style="padding:12px 28px">Comprar agora</button>
+    </div>
+    <div class="watch-info">
+      <span id="watchCategory"></span>
+      <span id="watchDuration"></span>
+      <span id="watchInstructor"></span>
+    </div>
   </div>
 </div>
 
 <script>
 // ══════════════════════════════════════════════════════
-//   🔥 FIREBASE CONFIG
-//   ⚠ SUBSTITUA com seus dados do Firebase Console!
-//   console.firebase.google.com → Configurações → App Web
+//   ⚠ COLOQUE AQUI O LINK RAW DO SEU courses.json
+//   Como pegar:
+//   1. Abre github.com/seuusuario/seurepositorio
+//   2. Clica em courses.json
+//   3. Clica em "Raw"
+//   4. Copia a URL e cola abaixo
 // ══════════════════════════════════════════════════════
-const firebaseConfig = {
-  apiKey:            "SUA_API_KEY",
-  authDomain:        "SEU_PROJETO.firebaseapp.com",
-  projectId:         "SEU_PROJETO",
-  storageBucket:     "SEU_PROJETO.appspot.com",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId:             "SEU_APP_ID"
-};
+const GITHUB_JSON_URL = "https://raw.githubusercontent.com/SEUUSUARIO/SEUREPOSITORIO/main/courses.json";
 
-// ══════════════════════════════════════════════════════
-//   ⚠ ADMIN EMAIL
-//   Coloque o email Google do admin aqui
-//   Só esse email pode adicionar/editar/deletar cursos
-// ══════════════════════════════════════════════════════
-const ADMIN_EMAIL = "seuemail@gmail.com";
-
-// ── Inicializa Firebase ──
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
-
-// ── Variáveis globais ──
-let currentUser  = null;
-let isAdmin      = false;
-let courses      = [];
-let editDocId    = null;
+// Variáveis globais
+let courses       = [];
 let currentFilter = 'all';
-let selectedPriceType = 'free';
 
-// ══════════════════════════════════════════════════════
-//   AUTENTICAÇÃO
-// ══════════════════════════════════════════════════════
-
-// Monitora estado de login — roda sempre que muda
-auth.onAuthStateChanged(function(user) {
-  document.getElementById('loading-screen').style.display = 'none';
-
-  if (user) {
-    // Usuário logado
-    currentUser = user;
-    isAdmin     = user.email === ADMIN_EMAIL;
-
-    // Mostra app e esconde login
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-
-    // Preenche info do usuário no header
-    document.getElementById('user-avatar').src  = user.photoURL || '';
-    document.getElementById('user-name').textContent = user.displayName || user.email;
-
-    // Mostra botões de admin só pro admin
-    if (isAdmin) {
-      document.getElementById('admin-badge').style.display   = 'inline';
-      document.getElementById('btn-add-course').style.display = 'inline-block';
-      document.getElementById('link-add').style.display      = 'inline-flex';
-    }
-
-    // Carrega cursos em tempo real do Firestore
-    loadCourses();
-
-  } else {
-    // Usuário não logado
-    currentUser = null;
-    isAdmin     = false;
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('app').style.display          = 'none';
-  }
-});
-
-// Login com Google
-function loginGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .catch(function(err) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        showToast('❌ Erro ao fazer login: ' + err.message);
-      }
-    });
-}
-
-// Logout
-function logout() {
-  auth.signOut();
-}
-
-// ══════════════════════════════════════════════════════
-//   FIRESTORE — Banco de dados em tempo real
-//   Qualquer mudança aparece pra TODOS os usuários!
-// ══════════════════════════════════════════════════════
-
-function loadCourses() {
-  // onSnapshot escuta mudanças em tempo real
-  // Sempre que alguém add/edit/delete um curso,
-  // essa função roda automaticamente pra todos!
-  db.collection('courses')
-    .orderBy('createdAt', 'desc')
-    .onSnapshot(function(snapshot) {
-      courses = [];
-      snapshot.forEach(function(doc) {
-        courses.push({ id: doc.id, ...doc.data() });
-      });
-      updateStats();
-      filterCourses();
-    }, function(err) {
-      console.error('Erro ao carregar cursos:', err);
-      showToast('❌ Erro ao carregar cursos');
-    });
-}
-
-// Salva curso no Firestore
-async function saveCourse() {
-  if (!isAdmin) { showToast('⛔ Apenas o admin pode adicionar cursos'); return; }
-
-  const title = document.getElementById('f_title').value.trim();
-  const url   = document.getElementById('f_url').value.trim();
-  if (!title) { showToast('⚠️ Informe o título'); return; }
-  if (!url)   { showToast('⚠️ Informe a URL'); return; }
-  if (selectedPriceType === 'paid' && !document.getElementById('f_price').value) {
-    showToast('⚠️ Informe o preço'); return;
-  }
-
-  const data = {
-    title,
-    url,
-    desc:      document.getElementById('f_desc').value.trim(),
-    category:  document.getElementById('f_cat').value,
-    duration:  document.getElementById('f_dur').value.trim(),
-    instructor:document.getElementById('f_inst').value.trim(),
-    badge:     document.getElementById('f_badge').value,
-    priceType: selectedPriceType,
-    price:     selectedPriceType === 'paid' ? (parseFloat(document.getElementById('f_price').value) || 0) : 0,
-    priceOrig: selectedPriceType === 'paid' ? (parseFloat(document.getElementById('f_price_orig').value) || '') : '',
-    buyLink:   selectedPriceType === 'paid' ? document.getElementById('f_buy_link').value.trim() : '',
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  };
-
+// ── Carrega cursos do GitHub ──────────────────────────
+async function loadCourses() {
   try {
-    if (editDocId) {
-      // Atualiza curso existente
-      await db.collection('courses').doc(editDocId).update(data);
-      showToast('✅ Curso atualizado! Todos verão a mudança.');
-    } else {
-      // Cria novo curso
-      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      data.rating    = '';
-      data.students  = '';
-      await db.collection('courses').add(data);
-      showToast('🎉 Curso adicionado! Já apareceu pra todo mundo.');
-    }
-    closeModal('addModal');
+    // Adiciona timestamp pra evitar cache do navegador
+    const url = GITHUB_JSON_URL + '?t=' + Date.now();
+    const res = await fetch(url);
+
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+
+    courses = await res.json();
+
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('sync-label').textContent = 'Sincronizado ✓';
+    updateStats();
+    filterCourses();
+
   } catch(err) {
-    showToast('❌ Erro ao salvar: ' + err.message);
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('sync-label').textContent = 'Erro ao carregar';
+    document.getElementById('coursesGrid').innerHTML = `
+      <div class="error-box" style="grid-column:1/-1">
+        <h3>⚠ Não consegui carregar os cursos</h3>
+        <p>Verifique se o link do GitHub está correto no código.</p>
+        <code>${GITHUB_JSON_URL}</code>
+        <p style="margin-top:12px;font-size:0.8rem">
+          Troque <strong>SEUUSUARIO</strong> e <strong>SEUREPOSITORIO</strong> pelo seu usuário e repositório do GitHub.
+        </p>
+      </div>`;
+    console.error('Erro:', err);
   }
 }
 
-// Deleta curso do Firestore
-async function deleteCourse(docId, title) {
-  if (!isAdmin) return;
-  if (!confirm(`Remover "${title}"?`)) return;
-  try {
-    await db.collection('courses').doc(docId).delete();
-    showToast('🗑 Curso removido para todos!');
-  } catch(err) {
-    showToast('❌ Erro ao remover: ' + err.message);
-  }
-}
-
-// ══════════════════════════════════════════════════════
-//   INTERFACE
-// ══════════════════════════════════════════════════════
-
-function fmtBRL(v)   { return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ','); }
+// ── Helpers ───────────────────────────────────────────
+function fmtBRL(v)    { return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ','); }
 function discount(p,o){ if (!o || o <= p) return null; return Math.round((1 - p/o) * 100); }
 function ytId(u)      { const r = u.match(/(?:youtube\.com\/(?:watch\?.*v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/); return r ? r[1] : null; }
 function embedUrl(u)  { const id = ytId(u); return id ? `https://www.youtube.com/embed/${id}?rel=0` : u; }
@@ -561,33 +303,29 @@ function updateStats() {
   document.getElementById('stat-paid').textContent       = courses.filter(c => c.priceType === 'paid').length;
 }
 
+// ── Renderiza os cards ────────────────────────────────
 function render(list) {
   const grid = document.getElementById('coursesGrid');
   grid.innerHTML = '';
 
   if (!list.length) {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);">Nenhum curso encontrado.</div>';
-    if (isAdmin) {
-      const add = document.createElement('div');
-      add.className = 'add-card';
-      add.innerHTML = '<div class="add-icon">+</div><p>Adicionar novo curso</p>';
-      add.onclick = openAddModal;
-      grid.appendChild(add);
-    }
     return;
   }
 
-  list.forEach(c => {
-    const t   = thumb(c.url);
-    const bm  = { new:['badge-new','Novo'], hot:['badge-hot','Em Alta'], free:['badge-free','Grátis'] };
-    const badge = c.badge && bm[c.badge] ? `<span class="course-badge ${bm[c.badge][0]}">${bm[c.badge][1]}</span>` : '';
-    const init  = (c.instructor||'A').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  list.forEach((c, i) => {
+    const t      = thumb(c.url);
+    const bm     = { new:['badge-new','Novo'], hot:['badge-hot','Em Alta'], free:['badge-free','Grátis'] };
+    const badge  = c.badge && bm[c.badge] ? `<span class="course-badge ${bm[c.badge][0]}">${bm[c.badge][1]}</span>` : '';
+    const init   = (c.instructor||'A').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
     const isFree = c.priceType === 'free';
     const disc   = !isFree ? discount(c.price, c.priceOrig) : null;
+
     const thumbHtml = t
       ? `<img src="${t}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<div class=\\"thumb-placeholder\\"><div class=\\"play-icon\\">▶</div></div>'">`
       : `<div class="thumb-placeholder"><div class="play-icon">▶</div></div>`;
 
+    const idx = courses.indexOf(c);
     const card = document.createElement('div');
     card.className = 'course-card';
     card.innerHTML = `
@@ -603,37 +341,20 @@ function render(list) {
           </div>
           ${disc ? `<span class="price-discount">-${disc}% OFF</span>` : ''}
         </div>
-        <button class="btn-enroll ${isFree?'free-btn':'paid-btn'}" onclick="event.stopPropagation();${isFree ? `watchCourse('${c.id}')` : c.buyLink ? `window.open('${esc(c.buyLink)}','_blank')` : `showToast('⚠️ Link não configurado')`}">
+        <button class="btn-enroll ${isFree?'free-btn':'paid-btn'}" onclick="event.stopPropagation();${isFree ? `watchCourse(${idx})` : c.buyLink ? `window.open('${esc(c.buyLink)}','_blank')` : `showToast('⚠️ Link de compra não configurado')`}">
           ${isFree ? '▶ Assistir grátis' : '💳 Comprar agora'}
         </button>
         <div class="course-meta">
-          ${c.rating   ? `<span><span class="stars">★</span> ${c.rating}</span>` : ''}
-          ${c.duration ? `<span>⏱ ${esc(c.duration)}</span>` : ''}
-          ${c.students ? `<span>👥 ${esc(c.students)}</span>` : ''}
-          ${c.instructor ? `<div class="course-instructor"><div class="avatar">${init}</div><span style="font-size:0.78rem">${esc(c.instructor)}</span></div>` : ''}
+          ${c.rating    ? `<span><span class="stars">★</span> ${c.rating}</span>` : ''}
+          ${c.duration  ? `<span>⏱ ${esc(c.duration)}</span>` : ''}
+          ${c.students  ? `<span>👥 ${esc(c.students)}</span>` : ''}
+          ${c.instructor? `<div class="course-instructor"><div class="avatar-small">${init}</div><span style="font-size:0.78rem">${esc(c.instructor)}</span></div>` : ''}
         </div>
       </div>`;
 
-    card.addEventListener('click', () => watchCourse(c.id));
-
-    // Clique direito = menu de edição (só admin)
-    if (isAdmin) {
-      card.addEventListener('contextmenu', e => {
-        e.preventDefault();
-        showCardMenu(c.id, c.title, e.clientX, e.clientY);
-      });
-    }
+    card.addEventListener('click', () => watchCourse(idx));
     grid.appendChild(card);
   });
-
-  // Botão de adicionar (só admin)
-  if (isAdmin) {
-    const add = document.createElement('div');
-    add.className = 'add-card';
-    add.innerHTML = '<div class="add-icon">+</div><p>Adicionar novo curso</p>';
-    add.onclick = openAddModal;
-    grid.appendChild(add);
-  }
 }
 
 function setFilter(btn, val) {
@@ -647,7 +368,7 @@ function filterCourses() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const filtered = courses.filter(c => {
     let m = true;
-    if (currentFilter === 'free') m = c.priceType === 'free';
+    if      (currentFilter === 'free') m = c.priceType === 'free';
     else if (currentFilter === 'paid') m = c.priceType === 'paid';
     else if (currentFilter !== 'all') m = c.category === currentFilter;
     return m && (!q || (c.title||'').toLowerCase().includes(q) || (c.desc||'').toLowerCase().includes(q) || (c.instructor||'').toLowerCase().includes(q));
@@ -655,13 +376,12 @@ function filterCourses() {
   render(filtered);
 }
 
-function watchCourse(docId) {
-  const c = courses.find(x => x.id === docId);
-  if (!c) return;
-  document.getElementById('watchIframe').src       = embedUrl(c.url);
-  document.getElementById('watchTitle').textContent = c.title;
-  document.getElementById('watchCategory').textContent  = c.category || '';
-  document.getElementById('watchDuration').textContent  = c.duration  ? '⏱ ' + c.duration  : '';
+function watchCourse(i) {
+  const c = courses[i];
+  document.getElementById('watchIframe').src         = embedUrl(c.url);
+  document.getElementById('watchTitle').textContent  = c.title;
+  document.getElementById('watchCategory').textContent  = c.category  || '';
+  document.getElementById('watchDuration').textContent  = c.duration   ? '⏱ ' + c.duration  : '';
   document.getElementById('watchInstructor').textContent = c.instructor ? '👤 ' + c.instructor : '';
   const pv = document.getElementById('watchPriceVal');
   const bb = document.getElementById('watchBuyBtn');
@@ -683,62 +403,22 @@ document.querySelectorAll('.modal-overlay').forEach(m =>
   m.addEventListener('click', e => { if (e.target === m) { closeModal(m.id); stopVideo(); } })
 );
 
-function openAddModal(docId = null) {
-  if (!isAdmin) { showToast('⛔ Apenas o admin pode adicionar cursos'); return; }
-  editDocId = docId;
-  const c = docId ? courses.find(x => x.id === docId) : {};
-  document.getElementById('modalTitle').textContent    = docId ? 'Editar Curso' : 'Adicionar Curso';
-  document.getElementById('modalSubtitle').textContent = docId ? 'Edite as informações.' : 'Cole o link do YouTube.';
-  document.getElementById('f_title').value     = c.title    || '';
-  document.getElementById('f_url').value       = c.url      || '';
-  document.getElementById('f_desc').value      = c.desc     || '';
-  document.getElementById('f_cat').value       = c.category || 'Programação';
-  document.getElementById('f_dur').value       = c.duration || '';
-  document.getElementById('f_inst').value      = c.instructor || '';
-  document.getElementById('f_badge').value     = c.badge    || '';
-  document.getElementById('f_price').value     = c.price    || '';
-  document.getElementById('f_price_orig').value = c.priceOrig || '';
-  document.getElementById('f_buy_link').value  = c.buyLink  || '';
-  selectPriceType(c.priceType || 'free');
-  openModal('addModal');
+function showGithubInfo() {
+  const el = document.getElementById('github-info');
+  el.style.display = el.style.display === 'none' ? 'flex' : 'none';
 }
-
-function selectPriceType(type) {
-  selectedPriceType = type;
-  document.getElementById('btn-free').className = 'price-type-btn' + (type === 'free' ? ' sel-free' : '');
-  document.getElementById('btn-paid').className = 'price-type-btn' + (type === 'paid' ? ' sel-paid' : '');
-  document.getElementById('price-fields').classList.toggle('visible', type === 'paid');
-}
-
-let menuEl = null;
-function showCardMenu(docId, title, x, y) {
-  removeMenu();
-  menuEl = document.createElement('div');
-  menuEl.style.cssText = `position:fixed;z-index:9999;top:${y}px;left:${x}px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 10px 40px rgba(0,0,0,0.5);min-width:160px;`;
-  [
-    ['▶  Assistir', () => watchCourse(docId)],
-    ['✏️  Editar',   () => openAddModal(docId)],
-    ['🗑  Remover',  () => deleteCourse(docId, title)],
-  ].forEach(([l, f]) => {
-    const b = document.createElement('button');
-    b.textContent = l;
-    b.style.cssText = `display:block;width:100%;padding:10px 14px;background:none;border:none;color:var(--text);text-align:left;cursor:pointer;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.875rem;`;
-    b.onmouseenter = () => b.style.background = 'var(--surface)';
-    b.onmouseleave = () => b.style.background = 'none';
-    b.onclick = () => { f(); removeMenu(); };
-    menuEl.appendChild(b);
-  });
-  document.body.appendChild(menuEl);
-  setTimeout(() => document.addEventListener('click', removeMenu, { once: true }), 10);
-}
-function removeMenu() { if (menuEl) { menuEl.remove(); menuEl = null; } }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+// ── Inicia ────────────────────────────────────────────
+loadCourses();
+
+// Recarrega a cada 5 minutos automaticamente
+setInterval(loadCourses, 5 * 60 * 1000);
 </script>
 </body>
 </html>
