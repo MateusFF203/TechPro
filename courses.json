@@ -24,9 +24,18 @@
     "badge": "free",
     "rating": "4.8",
     "students": "8.3k",
-    "priceType": "free",
-    "price": 0,
-    "priceOrig": ,
-    "buyLink": ""
+    "title": "Node.js e API REST",
+    "url": "https://www.youtube.com/watch?v=DiXbJL3iWVs",
+    "desc": "Crie APIs REST profissionais com Node.js, Express, MongoDB e autenticação JWT.",
+    "category": "Programação",
+    "duration": "12h",
+    "instructor": "Rocketseat",
+    "badge": "",
+    "rating": "4.9",
+    "students": "11k",
+    "priceType": "paid",
+    "price": 97,
+    "priceOrig": 197,
+    "buyLink": "https://exemplo.com/checkout-node"
   },
   
