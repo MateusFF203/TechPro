@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link
+    rel="icon" 
+    href="techpro.png"
+    type="image/x-icon"
+    >
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" name="description" content="Aprenda tecnologia com cursos gratuitos e pagos no TechPro.>
+<title>TechPro: Aprenda do seu jeito</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+
+  .intro{
+    position:relative;
+    width:100%;
+    height:315px;
+    margin-bottom:40px;
+  }
+
+  :root {
+    --bg:#0a0a0f; --surface:#13131a; --surface2:#1c1c28;
+    --accent:#42d1f5; --accent2:#46ff35; --text:#f0ede8;
+    --muted:#6b6b80; --border:rgba(255,255,255,0.07);
+    --radius:16px; --green:#22c55e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  /*  LOADING  */
+  #loading-screen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+  .spinner{width:40px;height:40px;border-radius:50%;border:3px solid var(--surface2);border-top-color:var(--accent);animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{color:var(--muted);font-size:0.85rem;}
+
+  header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent);letter-spacing:-0.5px;text-decoration:none;}
+  .logo span{color:var(--accent2);}
+  nav{display:flex;gap:8px;}
+  nav a{padding:8px 18px;border-radius:40px;font-size:0.875rem;font-weight:500;color:var(--muted);text-decoration:none;transition:all 0.2s;}
+  nav a:hover{color:var(--text);background:var(--surface2);}
+  nav a.active{color:var(--bg);background:var(--accent);font-weight:600;}
+
+  /* Sync badge */
+  .sync-badge{display:flex;align-items:center;gap:6px;font-size:0.75rem;color:var(--muted);}
+  .sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  .hero{padding:100px 48px 80px;position:relative;overflow:hidden;min-height:480px;display:flex;align-items:center;}
+  .hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 60% at 70% 50%,rgba(245,200,66,0.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(255,107,53,0.1) 0%,transparent 60%);}
+  .hero-content{position:relative;z-index:1;max-width:640px;}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:40px;background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.25);font-size:0.8rem;font-weight:500;color:var(--accent);margin-bottom:28px;}
+  .hero-tag::before{content:'●';font-size:0.5rem;animation:pulse 2s infinite;}
+  h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:22px;}
+  h1 em{font-style:normal;color:var(--accent);}
+  .hero p{font-size:1.1rem;color:rgba(240,237,232,0.65);line-height:1.7;max-width:500px;margin-bottom:36px;}
+  .hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn-primary{padding:14px 30px;border-radius:40px;background:var(--accent);color:var(--bg);font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 24px rgba(245,200,66,0.3);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(66, 161, 245, 0.4);}
+  .btn-outline{padding:14px 30px;border-radius:40px;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.95rem;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
+  .btn-outline:hover{background:var(--surface2);}
+
+  .stats{display:flex;margin:60px 48px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface);}
+  .stat{flex:1;padding:28px 32px;border-right:1px solid var(--border);transition:background 0.2s;}
+  .stat:last-child{border-right:none;}
+  .stat:hover{background:var(--surface2);}
+  .stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent);}
+  .stat-label{font-size:0.85rem;color:var(--muted);margin-top:4px;}
+
+  section{padding:80px 48px;}
+  .section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:40px;}
+  .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-0.5px;}
+
+  .search-bar{display:flex;gap:12px;margin-bottom:36px;flex-wrap:wrap;}
+  .search-input{flex:1;min-width:260px;padding:12px 20px;border-radius:40px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;}
+  .search-input::placeholder{color:var(--muted);}
+  .search-input:focus{border-color:rgba(66, 212, 245, 0.4);}
+  .filter-btn{padding:12px 20px;border-radius:40px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.875rem;cursor:pointer;transition:all 0.2s;}
+  .filter-btn:hover,.filter-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600;}
+
+  .courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+  .course-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all 0.3s;position:relative;display:flex;flex-direction:column;}
+  .course-card:hover{transform:translateY(-6px);border-color:rgba(66, 182, 245, 0.3);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .course-thumb{width:100%;aspect-ratio:16/9;background:var(--surface2);position:relative;overflow:hidden;}
+  .thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--surface2),#1a1a2e);}
+  .play-icon{width:52px;height:52px;background:rgba(245,200,66,0.15);border:2px solid rgba(245,200,66,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 0.3s;}
+  .course-card:hover .play-icon{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+  .course-badge{position:absolute;top:12px;left:12px;padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+  .badge-new{background:var(--accent);color:var(--bg);}
+  .badge-hot{background:var(--accent2);color:white;}
+  .badge-free{background:var(--green);color:white;}
+  .course-body{padding:20px;flex:1;display:flex;flex-direction:column;}
+  .course-category{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin-bottom:8px;}
+  .course-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:10px;}
+  .course-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
+  .course-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:12px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);}
+  .price-tag{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .price-value{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;}
+  .price-value.free{color:var(--green);}
+  .price-value.paid{color:var(--accent);}
+  .price-original{font-size:0.78rem;color:var(--muted);text-decoration:line-through;}
+  .price-discount{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--green);padding:3px 8px;border-radius:20px;font-size:0.7rem;font-weight:700;}
+  .btn-enroll{width:100%;padding:11px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:700;cursor:pointer;border:none;transition:all 0.2s;margin-bottom:14px;}
+  .btn-enroll.free-btn{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:var(--green);}
+  .btn-enroll.free-btn:hover{background:var(--green);color:white;}
+  .btn-enroll.paid-btn{background:var(--accent);color:var(--bg);box-shadow:0 4px 16px rgba(245,200,66,0.25);}
+  .btn-enroll.paid-btn:hover{box-shadow:0 6px 24px rgba(245,200,66,0.4);transform:translateY(-1px);}
+  .course-meta{display:flex;gap:12px;font-size:0.78rem;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);align-items:center;flex-wrap:wrap;}
+  .stars{color:var(--accent);}
+  .course-instructor{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  .avatar-small{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;color:var(--bg);}
+
+  /* Info box sobre como adicionar cursos */
+  .github-info{background:var(--surface);border:1px solid rgba(245,200,66,0.2);border-radius:var(--radius);padding:24px 28px;margin-bottom:32px;display:flex;align-items:flex-start;gap:16px;}
+  .github-info-icon{font-size:2rem;flex-shrink:0;}
+  .github-info h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--accent);margin-bottom:6px;}
+  .github-info p{font-size:0.85rem;color:var(--muted);line-height:1.6;}
+  .github-info code{background:var(--surface2);color:var(--accent);padding:2px 8px;border-radius:6px;font-size:0.8rem;}
+
+  .modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;position:relative;animation:slideUp 0.3s ease;}
+  @keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:var(--surface2);border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;}
+  .modal-close:hover{background:var(--accent);color:var(--bg);}
+  .watch-video{width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000;margin-bottom:20px;}
+  .watch-video iframe{width:100%;height:100%;border:none;}
+  .watch-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:12px;}
+  .watch-price-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);margin-bottom:14px;}
+  .watch-price-label{font-size:0.8rem;color:var(--muted);margin-bottom:4px;}
+  .watch-price-value{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;}
+  .watch-info{display:flex;gap:20px;color:var(--muted);font-size:0.85rem;}
+
+  /* Error state */
+  .error-box{text-align:center;padding:60px 20px;color:var(--muted);}
+  .error-box h3{font-family:'Syne',sans-serif;font-size:1.2rem;color:var(--accent2);margin-bottom:10px;}
+  .error-box code{background:var(--surface2);color:var(--text);padding:10px 16px;border-radius:8px;font-size:0.8rem;display:block;margin:16px auto;max-width:500px;word-break:break-all;}
+
+  footer{margin-top:40px;padding:40px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:0.85rem;}
+  footer strong{color:var(--accent);font-family:'Syne',sans-serif;}
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid rgba(245,200,66,0.3);padding:12px 24px;border-radius:40px;font-size:0.875rem;font-weight:500;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;color:var(--text);}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+  @media(max-width:768px){
+    header{padding:14px 20px;}nav{display:none;}
+    .hero{padding:60px 20px 40px;}
+    .stats{margin:40px 20px 0;flex-direction:column;}
+    .stat{border-right:none;border-bottom:1px solid var(--border);}
+    .stat:last-child{border-bottom:none;}
+    section{padding:60px 20px;}
+    footer{padding:30px 20px;flex-direction:column;gap:12px;text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-text">Carregando Aulas...</div>
+</div>
+
+<header>
+  <a class="logo" href="#">Tech<span>Pro</span></a>
+  <nav>
+    <a href="#" class="active">Início</a>
+    <a href="#">Categorias</a>
+    <a onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'})">Sobre</a>
+  </nav>
+  <div class="sync-badge">
+    <span class="sync-dot"></span>
+    <span id="sync-label">Carregando...</span>
+  </div>
+</header>
+
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✦ Plataforma de Cursos Online</div>
+    <h1>Aprenda o que<br>você <em>quiser,</em><br>quando quiser.</h1>
+    <p>Sua plataforma pessoal de cursos em vídeo. Organize, compartilhe e assista ao seu conteúdo favorito.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('cursos').scrollIntoView({behavior:'smooth'})">Ver Aula</button>
+      <button class="btn-outline" onclick="showGithubInfo()">Como adicionar vídeo Aula?</button>
+    </div>
+  </div>
+</div>
+
+<div style="display: flex; justify-content: center;">
+  <iframe 
+  width="999" 
+  height="615" 
+  src="https://www.youtube.com/embed/reCJUdRsBTs?si=9PSynDMazjHXvj-T" 
+  title="YouTube video player" 
+  frameborder="0" 
+  allow="autoplay" 
+  style="border: 4px solid #3498db; border-radius: 8px; box-shadow: 0px 4px 10px cyan;"
+  referrerpolicy="strict-origin-when-cross-origin"
+  id="intro"
+  ></iframe>
+</div>
+<div style="justify-content: left; align-items: flex-end;" >
+  <h1> 🚀 Antes de começar... </h1>
+  <h2 style="color: yellow;">⚠️ Não pule esta etapa! </h2>
+  <h3 style="color: rgba(180, 180, 180);">Assista à Introdução do TechPro antes de iniciar qualquer aula. Nela você vai entender como a plataforma funciona, como aproveitar melhor as aulas e receber orientações importantes para sua aprendizagem.
+
+✅ Leva apenas alguns minutos e pode fazer toda a diferença na sua experiência.
+
+Clique em "Introdução" e assista ao vídeo antes de continuar. Bons estudos! 📚</h3>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Aula disponíveis</div></div>
+  <div class="stat"><div class="stat-num" id="stat-categories">0</div><div class="stat-label">Categorias</div></div>
+  <div class="stat"><div class="stat-num" id="stat-free">0</div><div class="stat-label">Aulas gratuitas</div></div>
+  <div class="stat"><div class="stat-num" id="stat-paid">0</div><div class="stat-label">Aulas pagas</div></div>
+</div>
+
+<section id="cursos">
+  <div class="section-header">
+    <h2 class="section-title">Todas as Vídeo Aulas</h2>
+  </div>
+
+  <!-- Info como adicionar cursos -->
+  <div class="github-info" id="github-info" style="display:none">
+    <div class="github-info-icon">📝</div>
+    <div>
+      <h3>Como adicionar cursos?</h3>
+      <p>
+        Edite o arquivo <code>courses.json</code> no seu repositório GitHub
+        e os cursos aparecem aqui automaticamente para todo mundo!<br><br>
+        Adicione um novo objeto no array JSON com os campos:
+        <code>title</code>, <code>url</code>, <code>category</code>, <code>priceType</code>.
+      </p>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" class="search-input" id="searchInput" placeholder="🔍  Buscar cursos..." oninput="filterCourses()">
+    <button class="filter-btn active" onclick="setFilter(this,'all')">Todos</button>
+    <button class="filter-btn" onclick="setFilter(this,'free')">🟢 Gratuitos</button>
+    <button class="filter-btn" onclick="setFilter(this,'paid')">💰 Pagos</button>
+    <button class="filter-btn" onclick="setFilter(this,'Informática')">Informatica</button>
+    <button class="filter-btn" onclick="setFilter(this,'Tutorial')">Tutorial</button>
+    <button class="filter-btn" onclick="setFilter(this,'Download Grátis')">Download</button>
+  </div>
+
+  <div class="courses-grid" id="coursesGrid"></div>
+</section>
+
+<footer>
+  <div>Feito com ❤ <strong>TechPro © 2026</strong></div>
+  <div>📦 Cursos carregados do GitHub</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- WATCH MODAL -->
+<div class="modal-overlay" id="watchModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('watchModal');stopVideo()">×</button>
+    <div class="watch-video">
+      <iframe id="watchIframe" src="" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe>
+    </div>
+    <div class="watch-title" id="watchTitle"></div>
+    <div class="watch-price-bar">
+      <div>
+        <div class="watch-price-label">Valor da Aula</div>
+        <div class="watch-price-value" id="watchPriceVal"></div>
+      </div>
+      <button class="btn-primary" id="watchBuyBtn" style="padding:12px 28px">Comprar agora</button>
+    </div>
+    <div class="watch-info">
+      <span id="watchCategory"></span>
+      <span id="watchDuration"></span>
+      <span id="watchInstructor"></span>
+    </div>
+  </div>
+</div>
+<section id="sobre">
+  <div class="section-header">
+    <h1 class="section-title">Sobre</h1>
+    <br><br>
+    
+    <h4>Entre em contato conosco pelo email: familiavelozo109867@gmail.com</h4>
+    <br><br>
+    
+    <h4>Entre em contato conosco pelo telefone: (55) 65 99937-0082</h4>
+    <br><br>
+    
+    <H4>Criado por: </H4> <a href="https://www.youtube.com/@FamiliaVelozo325" target="_blank">Família Velozo</a>
+  </div>
+<script>
+// 
+//   Arquivo JSON com os cursos.
+//   Mantenha courses.json na mesma pasta do index.html.
+// 
+const GITHUB_JSON_URL = 'courses.json';
+// Variáveis globais
+let courses       = [];
+let currentFilter = 'all';
+
+//  Carrega cursos do GitHub 
+async function loadCourses() {
+  try {
+    // Adiciona timestamp para evitar cache do navegador
+    const url = GITHUB_JSON_URL + '?t=' + Date.now();
+    const res = await fetch(url);
+
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+
+    courses = await res.json();
+
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('sync-label').textContent = 'Sincronizado ✓';
+    updateStats();
+    filterCourses();
+
+  } catch(err) {
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('sync-label').textContent = 'Erro ao carregar';
+    document.getElementById('coursesGrid').innerHTML = `
+      <div class="error-box" style="grid-column:1/-1">
+        <h3>⚠ Não consegui carregar os cursos</h3>
+        <p>Verifique se o arquivo de cursos está correto.</p>
+        <code>${GITHUB_JSON_URL}</code>
+        <p style="margin-top:12px;font-size:0.8rem">
+          Troque <strong>SEUUSUARIO</strong> e <strong>SEUREPOSITORIO</strong> pelo seu usuário e repositório do GitHub.
+        </p>
+      </div>`;
+    console.error('Erro:', err);
+  }
+}
+
+//  Helpers 
+function fmtBRL(v)    { return 'R$ ' + parseFloat(v).toFixed(2).replace('.', ','); }
+function discount(p,o){ if (!o || o <= p) return null; return Math.round((1 - p/o) * 100); }
+function ytId(u)      { const r = u.match(/(?:youtube\.com\/(?:watch\?.*v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/); return r ? r[1] : null; }
+function embedUrl(u)  { const id = ytId(u); return id ? `https://www.youtube.com/embed/${id}?rel=0` : u; }
+function thumb(u)     { const id = ytId(u); return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null; }
+function esc(s)       { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function updateStats() {
+  document.getElementById('stat-total').textContent      = courses.length;
+  document.getElementById('stat-categories').textContent = new Set(courses.map(c => c.category)).size;
+  document.getElementById('stat-free').textContent       = courses.filter(c => c.priceType === 'free').length;
+  document.getElementById('stat-paid').textContent       = courses.filter(c => c.priceType === 'paid').length;
+}
+
+//  Renderiza os cards 
+function render(list) {
+  const grid = document.getElementById('coursesGrid');
+  grid.innerHTML = '';
+
+  if (!list.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);">Nenhum curso encontrado.</div>';
+    return;
+  }
+
+  list.forEach((c, i) => {
+    const t      = thumb(c.url);
+    const bm     = { new:['badge-new','Novo'], hot:['badge-hot','Em Alta'], free:['badge-free','Grátis'] };
+    const badge  = c.badge && bm[c.badge] ? `<span class="course-badge ${bm[c.badge][0]}">${bm[c.badge][1]}</span>` : '';
+    const init   = (c.instructor||'A').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const isFree = c.priceType === 'free';
+    const disc   = !isFree ? discount(c.price, c.priceOrig) : null;
+
+    const thumbHtml = t
+      ? `<img src="${t}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<div class=\\"thumb-placeholder\\"><div class=\\"play-icon\\"></div></div>'">`
+      : `<div class="thumb-placeholder"><div class="play-icon">▶</div></div>`;
+
+    const idx = courses.indexOf(c);
+    const card = document.createElement('div');
+    card.className = 'course-card';
+    card.innerHTML = `
+      <div class="course-thumb">${thumbHtml}${badge}</div>
+      <div class="course-body">
+        <div class="course-category">${esc(c.category)}</div>
+        <div class="course-title">${esc(c.title)}</div>
+        ${c.desc ? `<div class="course-desc">${esc(c.desc)}</div>` : ''}
+        <div class="course-price-row">
+          <div class="price-tag">
+            <span class="price-value ${isFree?'free':'paid'}">${isFree ? 'Grátis' : fmtBRL(c.price)}</span>
+            ${!isFree && c.priceOrig ? `<span class="price-original">${fmtBRL(c.priceOrig)}</span>` : ''}
+          </div>
+          ${disc ? `<span class="price-discount">-${disc}% OFF</span>` : ''}
+        </div>
+        <button class="btn-enroll ${isFree?'free-btn':'paid-btn'}" onclick="event.stopPropagation();${isFree ? `watchCourse(${idx})` : c.buyLink ? `window.open('${esc(c.buyLink)}','_blank')` : `showToast('Link de compra nâo configurado!!')`}">
+          ${isFree ? ' Assistir grátis' : 'Comprar agora'}
+        </button>
+        <div class="course-meta">
+          ${c.rating    ? `<span>⭐ ${esc(c.rating)}</span>` : ''}
+          ${c.duration  ? `<span>▶ ${esc(c.duration)}</span>` : ''}
+          ${c.students  ? `<span>👥 ${esc(c.students)}</span>` : ''}
+          ${c.instructor? `<div class="course-instructor"><div class="avatar-small">${init}</div><span style="font-size:0.78rem">${esc(c.instructor)}</span></div>` : ''}
+        </div>
+      </div>`;
+
+    card.addEventListener('click', () => watchCourse(idx));
+    grid.appendChild(card);
+  });
+}
+
+function setFilter(btn, val) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = val;
+  filterCourses();
+}
+
+function filterCourses() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = courses.filter(c => {
+    let m = true;
+    if      (currentFilter === 'free') m = c.priceType === 'free';
+    else if (currentFilter === 'paid') m = c.priceType === 'paid';
+    else if (currentFilter !== 'all') m = c.category === currentFilter;
+    return m && (!q || (c.title||'').toLowerCase().includes(q) || (c.desc||'').toLowerCase().includes(q) || (c.instructor||'').toLowerCase().includes(q));
+  });
+  render(filtered);
+}
+
+function watchCourse(i) {
+  const c = courses[i];
+  document.getElementById('watchIframe').src         = embedUrl(c.url);
+  document.getElementById('watchTitle').textContent  = c.title;
+  document.getElementById('watchCategory').textContent  = c.category  || '';
+  document.getElementById('watchDuration').textContent  = c.duration   ? '? ' + c.duration  : '';
+  document.getElementById('watchInstructor').textContent = c.instructor ? '?? ' + c.instructor : '';
+  const pv = document.getElementById('watchPriceVal');
+  const bb = document.getElementById('watchBuyBtn');
+  if (c.priceType === 'free') {
+    pv.textContent = 'Grátis'; pv.style.color = 'var(--green)';
+    bb.textContent = '▶ Assistindo...'; bb.style.background = 'var(--green)'; bb.onclick = () => {};
+  } else {
+    pv.textContent = fmtBRL(c.price); pv.style.color = 'var(--accent)';
+    bb.textContent = '💳 Comprar agora'; bb.style.background = '';
+    bb.onclick = () => { if (c.buyLink) window.open(c.buyLink, '_blank'); else showToast('⚠️ Link não configurado'); };
+  }
+  openModal('watchModal');
+}
+
+function stopVideo() { document.getElementById('watchIframe').src = ''; }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m =>
+  m.addEventListener('click', e => { if (e.target === m) { closeModal(m.id); stopVideo(); } })
+);
+
+function showGithubInfo() {
+  const el = document.getElementById('github-info');
+  el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+//  Inicia 
+loadCourses();
+
+// Recarrega a cada 5 minutos automaticamente
+setInterval(loadCourses, 5 * 60 * 1000);
+</script>
+</body>
+</html>

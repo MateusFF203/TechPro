@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Aprenda sobre PC do Zero",
+    "url": "https://youtu.be/NY1rqrxfeHc",
+    "desc": "Aprenda tudo sobre computadores, desde o básico até o avançado, incluindo hardware, software e manutenção.",
+    "category": "Informática",
+    "duration": "11min 22seg",
+    "instructor": "Mateus Velozo",
+    "badge": "free",
+    "rating": "4.8",
+    "students": "7.3k",
+    "priceType": "free",
+    "price": 0,
+    "priceOrig": "",
+    "buyLink": ""
+  },
+  {
+    "title": "Office Grátis",
+    "url": "https://youtu.be/Lu0EwytLeTI",
+    "desc": "Consiga o Office totalmente grátis.",
+    "category": "Download Grátis",
+    "duration": "7min 36seg",
+    "instructor": "Mateus Velozo",
+    "badge": "free",
+    "rating": "4.8",
+    "students": "10.3k",
+    "priceType": "free",
+    "price": 0,
+    "priceOrig": "",
+    "buyLink": ""
+  },
+  {
+    "title": "Tutorial de Streaming",
+    "url": "https://youtu.be/gZUJ5WHWAvg",
+    "desc": "Aprenda a criar e gerenciar streams de vídeo ou grava vídeos no obs.",
+    "category": "Tutorial",
+    "duration": "30min 24seg",
+    "instructor": "Mateus Velozo",
+    "badge": "free",
+    "rating": "4.8",
+    "students": "8.3k",
+    "priceType": "free",
+    "price": 0,
+    "priceOrig": "",
+    "buyLink": ""
+  }
+]
